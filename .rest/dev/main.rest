@@ -1,0 +1,169 @@
+@hostname = localhost
+@port = 9069
+# @host = templateapp.app/api/v1.0
+@host = {{hostname}}:{{port}}
+
+@userPrefix= v1.0/user
+@contentType = application/json
+@email= rk{{$randomInt 1 50}}@gmail.com
+@csrftoken = {{login.response.headers.set-cookie}}
+
+
+###
+POST http://{{host}}/{{userPrefix}}/register
+Content-Type: {{contentType}}
+
+{
+  "firstName": "rishabh",
+  "lastName": "kanojiya",
+  "email": "{{email}}",
+  "password": "Qwe@12345"
+}
+
+
+###
+# @name login
+POST http://{{host}}/{{userPrefix}}/login/
+Content-Type: {{contentType}}
+
+{
+    "email": "rk22@gmail.com",
+    "password": "Qwe@12345"
+}
+
+###
+POST http://{{host}}/{{userPrefix}}/logout/
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+
+###
+GET http://{{host}}/{{userPrefix}}/me
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+
+###
+# Subreddit Management
+@subredditPrefix = v1.0/subreddit
+
+# Create Subreddit
+###
+POST http://{{host}}/{{subredditPrefix}}
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+{
+  "name": "Subreddit {{$randomInt 1 10}}",
+  "description": "Description of the example subreddit"
+}
+
+# Get Subreddit Details
+###
+GET http://{{host}}/{{subredditPrefix}}/4
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+# Get Subreddit Posts
+###
+GET http://{{host}}/{{subredditPrefix}}/4/posts
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+
+###
+# Post Management
+@postPrefix = v1.0/post
+
+# Create Post
+###
+POST http://{{host}}/{{postPrefix}}
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+{
+  "title": "Post {{$randomInt 1 10}}",
+  "content": "Example Post Title",
+  "subredditId": 1
+}
+
+# Get Post Details
+###
+GET http://{{host}}/{{postPrefix}}/6
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+###
+# Comment Management
+@commentPrefix = v1.0/comment
+
+# Create Comment
+###
+POST http://{{host}}/{{commentPrefix}}
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+{
+  "content": "This is a comment {{$randomInt 1 10}}",
+  "postId": 6
+}
+
+# Get Post Comments
+###
+GET http://{{host}}/{{postPrefix}}/6/comments
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+
+# Subscription Management
+###
+@subscriptionPrefix = v1.0/subscription
+
+# Subscribe to Subreddit
+###
+POST http://{{host}}/{{subscriptionPrefix}}
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+{
+  "subredditId": 1
+}
+
+# Get User Subscriptions
+###
+GET http://{{host}}/{{subscriptionPrefix}}/1/subscriptions
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+
+# Voting Management
+###
+
+# Vote Get
+###
+GET http://{{host}}/{{postPrefix}}/6/vote
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+# Vote Post
+###
+POST http://{{host}}/{{postPrefix}}/6/vote
+Content-Type: {{contentType}}
+X-CSRFToken: {{csrftoken}}
+Cookie: {{login.response.headers.set-cookie}}
+
+{
+  "vote": -1
+}
