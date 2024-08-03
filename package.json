@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "start": "node index.js",
         "dev": "npx nodemon index.js",
         "create-migration": "knex --knexfile ./db/knexfile.js migrate:make",
         "migrate": "knex --knexfile ./db/knexfile.js migrate:latest",
